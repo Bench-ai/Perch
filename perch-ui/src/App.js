@@ -1,15 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
+import React from 'react';
+import {AppContainer, AppHeader} from "./App.styles";
 
 const App = () => {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p> Hello </p>
-      </header>
-    </div>
-  );
+    return (
+        <AppContainer>
+            <AppHeader>
+                <code> Hello World! </code>
+            </AppHeader>
+        </AppContainer>
+    );
 }
 
 export default App;
