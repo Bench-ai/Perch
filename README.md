@@ -16,3 +16,8 @@ Package maven
 ```bash
 mvn package
 ```
+
+Run server
+```bash
+mvn spring-boot:run
+```
