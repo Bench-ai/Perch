@@ -1,4 +1,4 @@
-# Perch
+# Bench
 
 Bench.ai will streamline the entire deep learning process from ideation all the way to deployment. 
 
@@ -9,3 +9,10 @@ Our tools will include a drag and drop based neural network builder, graphing to
 The outcome allows users of any skill level to utilize Deep Learning.
 
 ## Installation
+
+Install maven
+
+Package maven
+```bash
+mvn package
+```
