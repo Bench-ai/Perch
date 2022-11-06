@@ -1,12 +1,14 @@
 import React from 'react';
-import {AppContainer, AppHeader} from "./App.styles";
+import {Routes, Route} from "react-router";
+
+import {AppContainer} from "./App.styles";
 
 const App = () => {
     return (
         <AppContainer>
-            <AppHeader>
-                <code> Hello World! </code>
-            </AppHeader>
+            <code> Hello World! </code>
+            <Routes>
+            </Routes>
         </AppContainer>
     );
 }
