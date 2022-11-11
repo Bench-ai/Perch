@@ -1,1 +1,0 @@
-export const devWebsitePrefix = "http://localhost:8080";
