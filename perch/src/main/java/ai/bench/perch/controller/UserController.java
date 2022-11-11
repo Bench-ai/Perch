@@ -3,6 +3,7 @@ package ai.bench.perch.controller;
 import ai.bench.perch.entity.UserEntity;
 import ai.bench.perch.model.User;
 import ai.bench.perch.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,6 +14,7 @@ import java.util.Optional;
 @RequestMapping(value = "/api/user")
 public class UserController {
 
+    @Autowired
     private final UserRepository userRepository;
 
     public UserController(UserRepository userRepository) {
@@ -30,15 +32,11 @@ public class UserController {
         }
     }
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<User> createUser(@RequestBody UserEntity userEntity) {
-
-        User user = new User();
-
-        user.setEmail(userEntity.getEmail());
-        user.setUsername(userEntity.getUsername());
-        user.setPassword(userEntity.getPassword());
-
-        return new ResponseEntity<>(this.userRepository.save(user), HttpStatus.CREATED);
-    }
+//    @PostMapping(value = "/create")
+//    public ResponseEntity<User> createUser(@RequestBody UserEntity userEntity) {
+//
+//        User user = new User();
+//
+//        return new ResponseEntity<>(this.userRepository.save(user), HttpStatus.CREATED);
+//    }
 }
