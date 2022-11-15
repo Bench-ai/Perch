@@ -10,7 +10,6 @@ import ai.bench.perch.repository.UserRepository;
 import ai.bench.perch.security.JwtHelper;
 import ai.bench.perch.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -62,13 +61,12 @@ public class AuthController {
         String accessToken = jwtHelper.generateAccessToken(user);
         String refreshToken = jwtHelper.generateRefreshToken(user, rt);
 
-        return new ResponseEntity<>(
+        return ResponseEntity.ok(
                 new TokenEntity(
                         user.getId(),
                         accessToken,
                         refreshToken
-                ),
-                HttpStatus.OK
+                )
         );
     }
 
@@ -89,13 +87,12 @@ public class AuthController {
         String accessToken = jwtHelper.generateAccessToken(user);
         String refreshToken = jwtHelper.generateRefreshToken(user, rt);
 
-        return new ResponseEntity<>(
+        return ResponseEntity.ok(
                 new TokenEntity(
                         user.getId(),
                         accessToken,
                         refreshToken
-                ),
-                HttpStatus.OK
+                )
         );
     }
 
@@ -104,7 +101,7 @@ public class AuthController {
         String refreshToken = token.getRefreshToken();
         if (refreshTokenExists(refreshToken)) {
             refreshTokenRepository.deleteById(jwtHelper.getTokenIdFromRefreshToken(refreshToken));
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
         throw new BadCredentialsException("Invalid token");
     }
@@ -114,7 +111,7 @@ public class AuthController {
         String refreshToken = token.getRefreshToken();
         if (refreshTokenExists(refreshToken)) {
             refreshTokenRepository.deleteByOwner_Id(jwtHelper.getUserIdFromRefreshToken(refreshToken));
-            return new ResponseEntity<>(HttpStatus.OK);
+            return ResponseEntity.ok().build();
         }
         throw new BadCredentialsException("Invalid token");
     }
@@ -126,13 +123,12 @@ public class AuthController {
             User user = userService.findById(jwtHelper.getUserIdFromRefreshToken(refreshToken));
             String accessToken = jwtHelper.generateAccessToken(user);
 
-            return new ResponseEntity<>(
+            return ResponseEntity.ok(
                     new TokenEntity(
                             user.getId(),
                             accessToken,
                             refreshToken
-                    ),
-                    HttpStatus.OK
+                    )
             );
         }
         throw new BadCredentialsException("Invalid token");
@@ -153,13 +149,12 @@ public class AuthController {
             String accessToken = jwtHelper.generateAccessToken(user);
             String newRefreshToken = jwtHelper.generateRefreshToken(user, rt);
 
-            return new ResponseEntity<>(
+            return ResponseEntity.ok(
                     new TokenEntity(
                             user.getId(),
                             accessToken,
                             newRefreshToken
-                    ),
-                    HttpStatus.OK
+                    )
             );
         }
         throw new BadCredentialsException("Invalid token");

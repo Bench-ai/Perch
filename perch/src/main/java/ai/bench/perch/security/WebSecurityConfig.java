@@ -57,8 +57,8 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/",
-                        "/signup",
-                        "/login",
+                        "/signup*",
+                        "/login*",
                         "/favicon.ico",
                         "/**/*.png",
                         "/**/*.gif",
@@ -66,7 +66,8 @@ public class WebSecurityConfig {
                         "/**/*.jpg",
                         "/**/*.html",
                         "/**/*.css",
-                        "/**/*.js").permitAll()
+                        "/**/*.js",
+                        "/**/*.json").permitAll()
                 .antMatchers("/api/auth/**").permitAll()
                 .anyRequest().authenticated();
 
