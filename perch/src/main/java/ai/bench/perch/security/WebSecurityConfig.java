@@ -57,6 +57,7 @@ public class WebSecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS).and()
                 .authorizeRequests()
                 .antMatchers("/",
+                        "/perch/**",
                         "/signup*",
                         "/login*",
                         "/favicon.ico",
