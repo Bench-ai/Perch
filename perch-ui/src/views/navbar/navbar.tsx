@@ -4,7 +4,13 @@ import {useNavigate} from "react-router-dom";
 import BenchLogo from "../../assets/benchLogo.svg";
 
 import {ROUTE_AUTH_LOGIN, ROUTE_HOME_ABOUT, ROUTE_HOME_DEFAULT} from "../../constants/router.constants";
-import {ButtonStyled, Header, Image, LeftOptions, LinkStyled, RightOptions} from "./navbar.styles";
+import {
+    Header,
+    Image,
+    LeftOptions,
+    RightOptions
+} from "./navbar.styles";
+import {ButtonStyledDefault, ButtonStyledPrimary, LinkStyled} from "../../components/button/button.styles";
 
 
 const NavBar = () => {
@@ -26,12 +32,12 @@ const NavBar = () => {
                 </LinkStyled>
             </LeftOptions>
             <RightOptions>
-                <ButtonStyled type="text" size="large" onClick={() => navigateTo(ROUTE_HOME_ABOUT)}>
+                <ButtonStyledDefault type="text" size="large" onClick={() => navigateTo(ROUTE_HOME_ABOUT)}>
                     About
-                </ButtonStyled>
-                <ButtonStyled type="primary" size="large" onClick={() => navigateTo(ROUTE_AUTH_LOGIN)}>
+                </ButtonStyledDefault>
+                <ButtonStyledPrimary type="primary" size="large" onClick={() => navigateTo(ROUTE_AUTH_LOGIN)}>
                     Login
-                </ButtonStyled>
+                </ButtonStyledPrimary>
             </RightOptions>
         </Header>
     )

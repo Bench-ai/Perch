@@ -1,15 +1,7 @@
-import styled, {css} from "styled-components";
-import {Link} from "react-router-dom";
-import {Button} from "antd";
-
-const cursor = css`
-  cursor: pointer;
-  color: black;
-`;
+import styled from "styled-components";
 
 export const Header = styled.div`
   position:fixed;
-  margin:0;
   top:0;
   left:0;
   width: 100%;
@@ -36,18 +28,7 @@ export const RightOptions = styled.div`
   padding-right: 50px;
 `;
 
-export const LinkStyled = styled(Link)`
-  padding: 0px 10px;
-  text-decoration: none;
-  font-size: 16px;
-  ${cursor}
-`;
-
 export const Image = styled.img`
   height: 65%;
   width: 65%;
-`;
-
-export const ButtonStyled = styled(Button)`
-  margin: 0px 10px;
 `;
