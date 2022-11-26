@@ -1,7 +1,13 @@
 import axios from "axios";
 import {API_AUTH_LOGIN, API_AUTH_SIGNUP} from "../../constants/api.constants";
 
-export const signup = async (username: string, email: string, password: string) => {
+export interface SignupRequest {
+    username: string,
+    email: string,
+    password: string
+}
+
+export const signup = async ({username, email, password}: SignupRequest) => {
     try {
         const response = await axios.post(API_AUTH_SIGNUP, {
             username: username,
@@ -14,7 +20,12 @@ export const signup = async (username: string, email: string, password: string) 
     }
 }
 
-export const login = async (username: string, password: string) => {
+export interface LoginRequest {
+    username: string,
+    password: string
+}
+
+export const login = async ({username, password}: LoginRequest) => {
     try {
         const response = await axios.post(API_AUTH_LOGIN, {
             username: username,
@@ -25,3 +36,4 @@ export const login = async (username: string, password: string) => {
         console.error(e);
     }
 }
+
