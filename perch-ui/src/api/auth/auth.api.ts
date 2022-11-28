@@ -1,11 +1,6 @@
 import axios from "axios";
+import {ApiError, LoginRequest, LoginResponse, SignupRequest, SignupResponse} from "../../interfaces/api.interface";
 import {API_AUTH_LOGIN, API_AUTH_SIGNUP} from "../../constants/api.constants";
-
-export interface SignupRequest {
-    username: string,
-    email: string,
-    password: string
-}
 
 export const signup = async ({username, email, password}: SignupRequest) => {
     try {
@@ -14,15 +9,15 @@ export const signup = async ({username, email, password}: SignupRequest) => {
             email: email,
             password: password
         });
-        return response.data;
+        const DataResponse: SignupResponse = response.data;
+        return DataResponse;
     } catch (e) {
-        console.error(e);
+        const message = "Incorrect username or password";
+        const LoginError: ApiError = {
+            message: message
+        };
+        return LoginError;
     }
-}
-
-export interface LoginRequest {
-    username: string,
-    password: string
 }
 
 export const login = async ({username, password}: LoginRequest) => {
@@ -31,9 +26,13 @@ export const login = async ({username, password}: LoginRequest) => {
             username: username,
             password: password
         });
-        return response.data;
+        const DataResponse: LoginResponse = response.data;
+        return DataResponse;
     } catch (e) {
-        console.error(e);
+        const message = "Incorrect username or password";
+        const LoginError: ApiError = {
+            message: message
+        };
+        return LoginError;
     }
 }
-

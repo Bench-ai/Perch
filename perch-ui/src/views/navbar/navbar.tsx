@@ -3,7 +3,11 @@ import {useNavigate} from "react-router-dom";
 
 import BenchLogo from "../../assets/benchLogo.svg";
 
-import {ROUTE_AUTH_LOGIN, ROUTE_HOME_ABOUT, ROUTE_HOME_DEFAULT} from "../../constants/router.constants";
+import {
+    ROUTE_AUTH_LOGIN,
+    ROUTE_AUTH_SIGNUP,
+    ROUTE_HOME_DEFAULT
+} from "../../constants/router.constants";
 import {
     Header,
     Image,
@@ -28,11 +32,11 @@ const NavBar = () => {
                 </LinkStyledLarge>
             </LeftOptions>
             <RightOptions>
-                <ButtonStyledDefault type="text" size="large" onClick={() => navigateTo(ROUTE_HOME_ABOUT)}>
-                    About
+                <ButtonStyledDefault type="text" size="large" onClick={() => navigateTo(ROUTE_AUTH_LOGIN)}>
+                    Sign In
                 </ButtonStyledDefault>
-                <ButtonStyledPrimary type="primary" size="large" onClick={() => navigateTo(ROUTE_AUTH_LOGIN)}>
-                    Login
+                <ButtonStyledPrimary type="primary" size="large" onClick={() => navigateTo(ROUTE_AUTH_SIGNUP)}>
+                    Sign Up
                 </ButtonStyledPrimary>
             </RightOptions>
         </Header>
