@@ -35,13 +35,18 @@ const Login = () => {
         return response;
     }
 
-    const showError = () => {
-        if (loginError) return <AlertSmall message={message} type="error" showIcon closable={true} afterClose={() => setLoginError(false)}/>
-    }
-
     return (
         <Container>
-            {showError()}
+            {
+                loginError &&
+                <AlertSmall
+                    message={message}
+                    type="error"
+                    showIcon
+                    closable={true}
+                    afterClose={() => setLoginError(false)}
+                />
+            }
             <CardMainFocus>
                 <h1>Sign In to Bench</h1>
                 <Form
