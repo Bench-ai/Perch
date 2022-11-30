@@ -10,7 +10,7 @@ import { AlertSmall } from '../../components/alert/alert.styles';
 
 import {login} from "../../api/auth/auth.api";
 
-import {isApiError, isLoginResponse, LoginRequest} from '../../interfaces/api.interface';
+import {isApiError, isTokenResponse, LoginRequest} from '../../interfaces/api.interface';
 import {ROUTE_AUTH_SIGNUP, ROUTE_SERVICE_DASHBOARDS} from "../../constants/router.constants";
 import {Container} from "./login.styles";
 
@@ -24,10 +24,9 @@ const Login = () => {
     const onFinish = async (loginRequest: LoginRequest) => {
         setLoading(true);
         const response = await login(loginRequest);
-        if (isLoginResponse(response)) {
+        if (isTokenResponse(response)) {
             navigate(ROUTE_SERVICE_DASHBOARDS);
             setLoginError(false);
-
         } else if (isApiError(response)) {
             setMessage(response.message);
             setLoginError(true);

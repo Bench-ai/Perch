@@ -12,21 +12,20 @@ export interface LoginRequest {
     password: string
 }
 
+export interface User {
+    id: string,
+    username: string,
+    email: string
+}
+
 //Responses
-export interface SignupResponse {
+export interface TokenResponse {
     userId: string,
-    accessToken: string,
-    refreshToken: string
+    accessToken: string
 }
 
-export interface LoginResponse {
-    userId: string,
-    accessToken: string,
-    refreshToken: string
-}
-
-export const isLoginResponse = (object: any): object is LoginResponse => {
-    return 'userId' in object && 'accessToken' in object && 'refreshToken' in object;
+export const isTokenResponse = (object: any): object is TokenResponse => {
+    return 'userId' in object && 'accessToken' in object;
 }
 
 //Error
