@@ -6,3 +6,12 @@ export const AlertSmall = styled(Alert)`
     margin: auto;
     margin-bottom: 10px;
 `;
+
+export const AlertMedium = styled(Alert)`
+    max-width: 400px;
+    margin: auto;
+    margin-bottom: 10px;
+    @media (max-width: 500px) {
+      width: 350px;
+    }
+`;

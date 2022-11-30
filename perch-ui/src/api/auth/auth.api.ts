@@ -13,7 +13,7 @@ export const signup = async ({username, email, password}: SignupRequest) => {
         localStorage.setItem(LOCAL_STORAGE_TOKEN, DataResponse.accessToken);
         return DataResponse;
     } catch (e) {
-        const message = "Incorrect username or password";
+        const message = "Username or email already in use";
         const SignupError: ApiError = {
             message: message
         };
