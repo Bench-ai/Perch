@@ -10,5 +10,4 @@ import lombok.Setter;
 public class TokenEntity {
     private String userId;
     private String accessToken;
-    private String refreshToken;
 }

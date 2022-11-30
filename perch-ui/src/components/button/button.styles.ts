@@ -8,11 +8,26 @@ const cursor = css`
   color: black;
 `;
 
-export const LinkStyled = styled(Link)`
+export const LinkStyledSmall = styled(Link)`
+  padding: 0px 10px;
+  text-decoration: none;
+  font-size: 12px;
+  ${cursor}
+  
+  :hover {
+    color: ${COLOR_THEME_MAIN};
+  }
+`;
+
+export const LinkStyledLarge = styled(Link)`
   padding: 0px 10px;
   text-decoration: none;
   font-size: 16px;
   ${cursor}
+  
+  :hover {
+    color: ${COLOR_THEME_MAIN};
+  }
 `;
 
 export const ButtonStyledDefault = styled(Button)`

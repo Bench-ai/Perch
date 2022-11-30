@@ -18,11 +18,14 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 
 @RestController
@@ -41,9 +44,12 @@ public class AuthController {
     @Autowired
     UserService userService;
 
+    private final String REFRESH_TOKEN_CONSTANT = "refreshToken";
+    private final String REFRESH_TOKEN_COOKIE_PATH = "/api/auth";
+
     @PostMapping(value = "/login")
     @Transactional
-    public ResponseEntity<TokenEntity> login(@Valid @RequestBody LoginEntity login) {
+    public ResponseEntity<TokenEntity> login(@Valid @RequestBody LoginEntity login, HttpServletResponse response) {
         Authentication authentication = authenticationManager
                 .authenticate(
                         new UsernamePasswordAuthenticationToken(
@@ -61,18 +67,25 @@ public class AuthController {
         String accessToken = jwtHelper.generateAccessToken(user);
         String refreshToken = jwtHelper.generateRefreshToken(user, rt);
 
+        Cookie cookie = new Cookie(REFRESH_TOKEN_CONSTANT, refreshToken);
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setPath(REFRESH_TOKEN_COOKIE_PATH);
+
+        response.addCookie(cookie);
+
         return ResponseEntity.ok(
                 new TokenEntity(
                         user.getId(),
-                        accessToken,
-                        refreshToken
+                        accessToken
                 )
         );
     }
 
     @PostMapping(value = "/signup")
     @Transactional
-    public ResponseEntity<TokenEntity> signup(@Valid @RequestBody SignupEntity signup) {
+    public ResponseEntity<TokenEntity> signup(@Valid @RequestBody SignupEntity signup, HttpServletResponse response) {
         User user = new User(
                 signup.getUsername(),
                 signup.getEmail(),
@@ -87,18 +100,35 @@ public class AuthController {
         String accessToken = jwtHelper.generateAccessToken(user);
         String refreshToken = jwtHelper.generateRefreshToken(user, rt);
 
+        Cookie cookie = new Cookie(REFRESH_TOKEN_CONSTANT, refreshToken);
+        cookie.setMaxAge(30 * 24 * 60 * 60);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setPath(REFRESH_TOKEN_COOKIE_PATH);
+
+        response.addCookie(cookie);
+
         return ResponseEntity.ok(
                 new TokenEntity(
                         user.getId(),
-                        accessToken,
-                        refreshToken
+                        accessToken
                 )
         );
     }
 
     @PostMapping(value = "/logout")
-    public ResponseEntity<?> logout(@RequestBody TokenEntity token) {
-        String refreshToken = token.getRefreshToken();
+    public ResponseEntity<?> logout(
+            @CookieValue(value = REFRESH_TOKEN_CONSTANT, defaultValue = "") String refreshToken,
+            HttpServletResponse response) {
+
+        Cookie cookie = new Cookie(REFRESH_TOKEN_CONSTANT, null);
+        cookie.setMaxAge(0);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setPath(REFRESH_TOKEN_COOKIE_PATH);
+
+        response.addCookie(cookie);
+
         if (refreshTokenExists(refreshToken)) {
             refreshTokenRepository.deleteById(jwtHelper.getTokenIdFromRefreshToken(refreshToken));
             return ResponseEntity.ok().build();
@@ -107,8 +137,17 @@ public class AuthController {
     }
 
     @PostMapping(value = "/logoutAll")
-    public ResponseEntity<?> logoutAll(@RequestBody TokenEntity token) {
-        String refreshToken = token.getRefreshToken();
+    public ResponseEntity<?> logoutAll(
+            @CookieValue(value = REFRESH_TOKEN_CONSTANT, defaultValue = "") String refreshToken,
+            HttpServletResponse response) {
+        Cookie cookie = new Cookie(REFRESH_TOKEN_CONSTANT, null);
+        cookie.setMaxAge(0);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setPath(REFRESH_TOKEN_COOKIE_PATH);
+
+        response.addCookie(cookie);
+
         if (refreshTokenExists(refreshToken)) {
             refreshTokenRepository.deleteByOwner_Id(jwtHelper.getUserIdFromRefreshToken(refreshToken));
             return ResponseEntity.ok().build();
@@ -117,8 +156,8 @@ public class AuthController {
     }
 
     @PostMapping(value = "/accessToken")
-    public ResponseEntity<TokenEntity> accessToken(@RequestBody TokenEntity token) {
-        String refreshToken = token.getRefreshToken();
+    public ResponseEntity<TokenEntity> accessToken(
+            @CookieValue(value = REFRESH_TOKEN_CONSTANT, defaultValue = "") String refreshToken) {
         if (refreshTokenExists(refreshToken)) {
             User user = userService.findById(jwtHelper.getUserIdFromRefreshToken(refreshToken));
             String accessToken = jwtHelper.generateAccessToken(user);
@@ -126,34 +165,7 @@ public class AuthController {
             return ResponseEntity.ok(
                     new TokenEntity(
                             user.getId(),
-                            accessToken,
-                            refreshToken
-                    )
-            );
-        }
-        throw new BadCredentialsException("Invalid token");
-    }
-
-    @PostMapping(value = "/refreshToken")
-    public ResponseEntity<TokenEntity> refreshToken(@RequestBody TokenEntity token) {
-        String refreshToken = token.getRefreshToken();
-        if (refreshTokenExists(refreshToken)) {
-            refreshTokenRepository.deleteById(jwtHelper.getTokenIdFromRefreshToken(refreshToken));
-
-            User user = userService.findById(jwtHelper.getUserIdFromRefreshToken(refreshToken));
-
-            RefreshToken rt = new RefreshToken();
-            rt.setOwner(user);
-            refreshTokenRepository.save(rt);
-
-            String accessToken = jwtHelper.generateAccessToken(user);
-            String newRefreshToken = jwtHelper.generateRefreshToken(user, rt);
-
-            return ResponseEntity.ok(
-                    new TokenEntity(
-                            user.getId(),
-                            accessToken,
-                            newRefreshToken
+                            accessToken
                     )
             );
         }
