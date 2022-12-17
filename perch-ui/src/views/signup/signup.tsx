@@ -1,15 +1,14 @@
 import React, {useState} from 'react';
-import { Container } from './signup.styles.js';
+import { Container } from './signup.styles';
 import {Form, Input} from "antd";
-import {isApiError, isTokenResponse, SignupRequest} from "../../interfaces/api.interface";
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
-import {ButtonStyledPrimary} from "../../components/button/button.styles";
+import {ButtonStyledPrimary, LinkStyledLarge} from "../../components/button/button.styles";
 import {useNavigate} from "react-router-dom";
-import {AlertMedium} from "../../components/alert/alert.styles";
+import {AlertSmall} from "../../components/alert/alert.styles";
 import {signup} from "../../api/auth/auth.api";
-import {SignupForm} from "../../interfaces/form.interface";
-import {ROUTE_SERVICE_DASHBOARDS} from "../../constants/router.constants";
 import { CardMainFocus } from '../../components/card/card.styles';
+import {ROUTE_AUTH_LOGIN, ROUTE_SERVICE_DASHBOARDS} from "../../constants";
+import {isApiError, isToken, SignupForm, SignupRequest} from "../../interfaces";
 
 const Signup = () => {
     const [loading, setLoading] = useState(false);
@@ -58,7 +57,7 @@ const Signup = () => {
                 password: password
             }
             const response = await signup(signupRequest);
-            if (isTokenResponse(response)) {
+            if (isToken(response)) {
                 navigate(ROUTE_SERVICE_DASHBOARDS);
                 setError(false);
             } else if (isApiError(response)) {
@@ -73,7 +72,7 @@ const Signup = () => {
         <Container>
             {
                 error &&
-                <AlertMedium
+                <AlertSmall
                     message={message}
                     type="error"
                     showIcon
@@ -119,6 +118,7 @@ const Signup = () => {
                     </Form.Item>
                 </Form>
             </CardMainFocus>
+            <LinkStyledLarge to={ROUTE_AUTH_LOGIN}>Already have an account? Sign in.</LinkStyledLarge>
         </Container>
     )
 }

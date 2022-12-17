@@ -30,6 +30,6 @@ export const RightOptions = styled.div`
 `;
 
 export const Image = styled.img`
-  height: 65%;
-  width: 65%;
+  width: 58px;
+  height: 38px;
 `;

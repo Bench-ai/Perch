@@ -1,5 +1,3 @@
-//AUTH
-
 //Requests
 export interface SignupRequest {
     username: string,
@@ -12,21 +10,7 @@ export interface LoginRequest {
     password: string
 }
 
-export interface User {
-    id: string,
-    username: string,
-    email: string
-}
-
 //Responses
-export interface TokenResponse {
-    userId: string,
-    accessToken: string
-}
-
-export const isTokenResponse = (object: any): object is TokenResponse => {
-    return 'userId' in object && 'accessToken' in object;
-}
 
 //Error
 export interface ApiError {
@@ -35,4 +19,12 @@ export interface ApiError {
 
 export const isApiError = (object: any): object is ApiError => {
     return 'message' in object;
+}
+
+export interface CredentialsExpired extends ApiError {
+    expired: boolean
+}
+
+export const isCredentialsExpired = (object: any): object is CredentialsExpired => {
+    return 'message' in object && 'expired' in object;
 }

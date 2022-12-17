@@ -4,25 +4,25 @@ import {useNavigate} from "react-router-dom";
 import BenchLogo from "../../assets/benchLogo.svg";
 
 import {
-    ROUTE_AUTH_LOGIN,
-    ROUTE_AUTH_SIGNUP,
-    ROUTE_HOME_DEFAULT
-} from "../../constants/router.constants";
-import {
     Header,
     Image,
     LeftOptions,
     RightOptions
 } from "./navbar.styles";
 import {ButtonStyledDefault, ButtonStyledPrimary, LinkStyledLarge} from "../../components/button/button.styles";
+import {
+    ROUTE_AUTH_LOGIN,
+    ROUTE_AUTH_SIGNUP,
+    ROUTE_HOME_DEFAULT,
+    ROUTE_SERVICE_DASHBOARDS,
+    ROUTE_SERVICE_PROFILE
+} from "../../constants";
 
 
 const NavBar = () => {
+    const token = localStorage.getItem('token');
     const navigate = useNavigate();
 
-    const navigateTo = (route: string) => {
-        navigate(route);
-    }
 
     return (
         <Header>
@@ -32,12 +32,26 @@ const NavBar = () => {
                 </LinkStyledLarge>
             </LeftOptions>
             <RightOptions>
-                <ButtonStyledDefault type="text" size="large" onClick={() => navigateTo(ROUTE_AUTH_LOGIN)}>
-                    Sign In
-                </ButtonStyledDefault>
-                <ButtonStyledPrimary type="primary" size="large" onClick={() => navigateTo(ROUTE_AUTH_SIGNUP)}>
-                    Sign Up
-                </ButtonStyledPrimary>
+                {
+                    token ?
+                        <>
+                            <ButtonStyledDefault type="text" size="large" onClick={() => navigate(ROUTE_SERVICE_DASHBOARDS)}>
+                                Dashboards
+                            </ButtonStyledDefault>
+                            <ButtonStyledPrimary type="primary" size="large" onClick={() => navigate(ROUTE_SERVICE_PROFILE)}>
+                                Profile
+                            </ButtonStyledPrimary>
+                        </>
+                        :
+                        <>
+                            <ButtonStyledDefault type="text" size="large" onClick={() => navigate(ROUTE_AUTH_LOGIN)}>
+                                Sign In
+                            </ButtonStyledDefault>
+                            <ButtonStyledPrimary type="primary" size="large" onClick={() => navigate(ROUTE_AUTH_SIGNUP)}>
+                                Sign Up
+                            </ButtonStyledPrimary>
+                        </>
+                }
             </RightOptions>
         </Header>
     )

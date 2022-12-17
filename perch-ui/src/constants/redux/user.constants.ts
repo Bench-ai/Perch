@@ -1,0 +1,12 @@
+export enum USER_ACTION_TYPES {
+    SET_CURRENT_USER = "redux/user/SET_CURRENT_USER"
+}
+
+export enum AUTH_ACTION_TYPES {
+    SIGN_IN_WITH_EMAIL_START = "redux/auth/SIGN_IN_WITH_EMAIL_START",
+    SIGN_IN_SUCCESS = "redux/auth/SIGN_IN_SUCCESS",
+    SIGN_IN_FAILURE = "redux/auth/SIGN_IN_FAILURE",
+    SIGN_UP_START = "redux/auth/SIGN_UP_START",
+    SIGN_UP_SUCCESS = "redux/auth/SIGN_UP_SUCCESS",
+    SIGN_UP_FAILURE = "redux/auth/SIGN_UP_FAILURE"
+}

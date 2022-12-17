@@ -1,5 +1,5 @@
 import styled from "styled-components";
-import {COLOR_LOGO_BASE} from "../constants/colors.constants";
+import { COLOR_LOGO_BASE } from "../constants";
 
 export const AppContainer = styled.div`
   text-align: center;

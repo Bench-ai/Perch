@@ -1,5 +1,5 @@
 import React, {useState} from 'react';
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 
 import {Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
@@ -10,9 +10,9 @@ import { AlertSmall } from '../../components/alert/alert.styles';
 
 import {login} from "../../api/auth/auth.api";
 
-import {isApiError, isTokenResponse, LoginRequest} from '../../interfaces/api.interface';
-import {ROUTE_AUTH_SIGNUP, ROUTE_SERVICE_DASHBOARDS} from "../../constants/router.constants";
+import {ROUTE_AUTH_SIGNUP, ROUTE_SERVICE_DASHBOARDS} from "../../constants";
 import {Container} from "./login.styles";
+import {isApiError, isToken, LoginRequest} from "../../interfaces";
 
 const Login = () => {
     const [loginError, setLoginError] = useState(false);
@@ -20,13 +20,15 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const navigate = useNavigate();
+    const location = useLocation();
+    const from = location.state?.from?.pathname || ROUTE_SERVICE_DASHBOARDS;
 
     const onFinish = async (loginRequest: LoginRequest) => {
         setLoading(true);
         const response = await login(loginRequest);
-        if (isTokenResponse(response)) {
-            navigate(ROUTE_SERVICE_DASHBOARDS);
+        if (isToken(response)) {
             setLoginError(false);
+            navigate(from, { replace: true });
         } else if (isApiError(response)) {
             setMessage(response.message);
             setLoginError(true);

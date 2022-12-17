@@ -1,7 +1,7 @@
 import styled, {css} from "styled-components";
 import {Button} from "antd";
-import {COLOR_THEME_MAIN} from "../../constants/colors.constants";
 import {Link} from "react-router-dom";
+import {COLOR_THEME_MAIN} from "../../constants";
 
 const cursor = css`
   cursor: pointer;
