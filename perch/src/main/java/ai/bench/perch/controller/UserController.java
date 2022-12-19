@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api/private/user")
 public class UserController {
     @Autowired
     UserRepository userRepository;

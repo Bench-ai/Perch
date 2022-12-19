@@ -1,6 +1,10 @@
 import axios from 'axios';
-import {API_AUTH_ACCESS_TOKEN, API_ENDPOINT_PREFIX, LOCAL_STORAGE_TOKEN} from "../constants/api.constants";
-import {ApiError} from "../interfaces/api.interface";
+import {credentialsExpiredNotification} from "../components/notification/notification";
+import {API_ENDPOINT_PREFIX} from '../constants';
+import {CredentialsExpired} from "../interfaces";
+import {store} from "../app/store";
+import {selectCurrentToken} from "../redux/auth/auth.selector";
+import { accessTokenStart } from '../redux/auth/auth.action';
 
 export default axios.create({
     baseURL: API_ENDPOINT_PREFIX(),
@@ -14,10 +18,10 @@ export const axiosPrivate = axios.create({
 });
 
 axiosPrivate.interceptors.request.use((req) => {
-        const token = localStorage.getItem(LOCAL_STORAGE_TOKEN);
+        const token = selectCurrentToken(store.getState());
 
         if (token) {
-            req.headers!.Authorization = `Bearer ${token}`;
+            req.headers!.Authorization = `Bearer ${token.accessToken}`;
         }
         return req;
     }, (err) => Promise.reject(err)
@@ -29,24 +33,10 @@ axiosPrivate.interceptors.response.use(
     },
     async (err) => {
         if (err.response.status === 401 && !err.config._retry) {
-            try {
-                const { data } = await axios.post(API_AUTH_ACCESS_TOKEN, {}, {
-                    withCredentials: true
-                })
-
-                localStorage.setItem(LOCAL_STORAGE_TOKEN, data.accessToken);
-                err.config._retry = true;
-
-                return axiosPrivate(err.config);
-            } catch (err) {
-                const message = "Token is invalid or expired";
-                const TokenError: ApiError = {
-                    message: message
-                };
-                return TokenError;
-            }
+            store.dispatch(accessTokenStart())
+            err.config._retry = true;
+            return axiosPrivate(err.config);
         }
-
         return Promise.reject(err);
     }
 );

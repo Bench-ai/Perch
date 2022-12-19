@@ -1,5 +1,9 @@
-import React, {useState} from 'react';
-import {useNavigate} from "react-router-dom";
+import React, {useEffect, useState} from 'react';
+import {useLocation, useNavigate} from "react-router-dom";
+import {useDispatch, useSelector} from "react-redux";
+
+import { signInWithEmailStart } from '../../redux/auth/auth.action';
+import {selectAuthError, selectAuthLoading, selectCurrentToken} from "../../redux/auth/auth.selector";
 
 import {Form, Input} from "antd";
 import {LockOutlined, UserOutlined} from "@ant-design/icons";
@@ -8,43 +12,43 @@ import {ButtonStyledPrimary, LinkStyledLarge} from '../../components/button/butt
 import {CardMainFocus} from "../../components/card/card.styles";
 import { AlertSmall } from '../../components/alert/alert.styles';
 
-import {login} from "../../api/auth/auth.api";
-
-import {isApiError, isTokenResponse, LoginRequest} from '../../interfaces/api.interface';
-import {ROUTE_AUTH_SIGNUP, ROUTE_SERVICE_DASHBOARDS} from "../../constants/router.constants";
+import {ROUTE_AUTH_SIGNUP, ROUTE_SERVICE_DASHBOARDS} from "../../constants";
 import {Container} from "./login.styles";
+import {LoginRequest} from "../../interfaces";
 
 const Login = () => {
-    const [loginError, setLoginError] = useState(false);
-    const [message, setMessage] = useState("");
-    const [loading, setLoading] = useState(false);
+    const message = "Username or password is incorrect";
+    const [error, setError] = useState(false);
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const onFinish = async (loginRequest: LoginRequest) => {
-        setLoading(true);
-        const response = await login(loginRequest);
-        if (isTokenResponse(response)) {
-            navigate(ROUTE_SERVICE_DASHBOARDS);
-            setLoginError(false);
-        } else if (isApiError(response)) {
-            setMessage(response.message);
-            setLoginError(true);
-        }
-        setLoading(false);
-        return response;
+    const token = useSelector(selectCurrentToken);
+    const loginError = useSelector(selectAuthError);
+    const loading = useSelector(selectAuthLoading);
+
+    const from = location.state?.from?.pathname || ROUTE_SERVICE_DASHBOARDS;
+
+    useEffect(() => {
+        if (token) navigate(from, { replace: true });
+        if (loginError) setError(true);
+    }, [loading])
+
+    const onFinish = (loginRequest: LoginRequest) => {
+        dispatch(signInWithEmailStart(loginRequest));
     }
 
     return (
         <Container>
             {
-                loginError &&
+                error &&
                 <AlertSmall
                     message={message}
                     type="error"
                     showIcon
                     closable={true}
-                    afterClose={() => setLoginError(false)}
+                    afterClose={() => setError(false)}
                 />
             }
             <CardMainFocus>

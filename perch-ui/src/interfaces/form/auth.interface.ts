@@ -1,6 +1,3 @@
-// Form
-
-// Auth
 export interface SignupForm {
     username: string,
     email: string,

@@ -1,22 +1,35 @@
-import React, {useState} from 'react';
-import { Container } from './signup.styles.js';
+import React, {useEffect, useState} from 'react';
+import { Container } from './signup.styles';
 import {Form, Input} from "antd";
-import {isApiError, isTokenResponse, SignupRequest} from "../../interfaces/api.interface";
 import {LockOutlined, MailOutlined, UserOutlined} from "@ant-design/icons";
-import {ButtonStyledPrimary} from "../../components/button/button.styles";
+import {ButtonStyledPrimary, LinkStyledLarge} from "../../components/button/button.styles";
 import {useNavigate} from "react-router-dom";
-import {AlertMedium} from "../../components/alert/alert.styles";
-import {signup} from "../../api/auth/auth.api";
-import {SignupForm} from "../../interfaces/form.interface";
-import {ROUTE_SERVICE_DASHBOARDS} from "../../constants/router.constants";
+import {AlertSmall} from "../../components/alert/alert.styles";
 import { CardMainFocus } from '../../components/card/card.styles';
+import {ROUTE_AUTH_LOGIN, ROUTE_SERVICE_DASHBOARDS} from "../../constants";
+import {SignupForm, SignupRequest} from "../../interfaces";
+import {useDispatch, useSelector} from "react-redux";
+import {signUpStart} from "../../redux/auth/auth.action";
+import {selectAuthError, selectAuthLoading, selectCurrentToken} from "../../redux/auth/auth.selector";
 
 const Signup = () => {
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(false);
     const [message, setMessage] = useState("");
 
+    const dispatch = useDispatch();
     const navigate = useNavigate();
+
+    const token = useSelector(selectCurrentToken);
+    const loading = useSelector(selectAuthLoading);
+    const signupError = useSelector(selectAuthError);
+
+    useEffect(() => {
+        if (token) navigate(ROUTE_SERVICE_DASHBOARDS);
+        if (signupError) {
+            setMessage("Username or email is already taken");
+            setError(true);
+        }
+    }, [loading]);
 
     const checkForm = (signupForm: SignupForm): boolean => {
         const {username, password, confirmPassword} = signupForm;
@@ -49,7 +62,6 @@ const Signup = () => {
     }
 
     const onFinish = async (signupForm: SignupForm) => {
-        setLoading(true);
         const {username, email, password} = signupForm;
         if (checkForm(signupForm)) {
             const signupRequest: SignupRequest = {
@@ -57,23 +69,15 @@ const Signup = () => {
                 email: email,
                 password: password
             }
-            const response = await signup(signupRequest);
-            if (isTokenResponse(response)) {
-                navigate(ROUTE_SERVICE_DASHBOARDS);
-                setError(false);
-            } else if (isApiError(response)) {
-                setMessage(response.message);
-                setError(true);
-            }
+            dispatch(signUpStart(signupRequest));
         }
-        setLoading(false);
     }
 
     return (
         <Container>
             {
                 error &&
-                <AlertMedium
+                <AlertSmall
                     message={message}
                     type="error"
                     showIcon
@@ -119,6 +123,7 @@ const Signup = () => {
                     </Form.Item>
                 </Form>
             </CardMainFocus>
+            <LinkStyledLarge to={ROUTE_AUTH_LOGIN}>Already have an account? Sign in.</LinkStyledLarge>
         </Container>
     )
 }
