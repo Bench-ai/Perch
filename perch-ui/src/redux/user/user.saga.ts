@@ -1,23 +1,28 @@
-import { takeLatest, all, call, put } from "redux-saga/effects";
-import {login} from "../../api/auth/auth.api";
-import {signInFailure, SignInWithEmailStart} from "./user.action";
-import {AUTH_ACTION_TYPES} from "../../constants";
+import { takeLatest, all, call, put } from "typed-redux-saga/macro";
+import {
+    currentUserFailure, currentUserSuccess,
+} from "./user.action";
+import {USER_ACTION_TYPES} from "../../constants";
+import {isUser} from "../../interfaces";
+import {currentUser} from "../../api/user/user.api";
 
-function* signInWithEmail({payload}: SignInWithEmailStart) {
+function* getCurrentUser() {
     try {
-        const { data } = yield call(login, payload);
-    } catch(error) {
-        yield put(signInFailure(error as Error))
+        const { data } = yield* call(currentUser);
+        if (isUser(data)) {
+            yield* put(currentUserSuccess(data));
+        }
+    } catch (error) {
+        yield* put(currentUserFailure(error as Error));
     }
 }
 
-export function* onSignInWithEmailStart() {
-    yield takeLatest(AUTH_ACTION_TYPES.SIGN_IN_WITH_EMAIL_START, signInWithEmail)
+export function* onCurrentUserStart() {
+    yield* takeLatest(USER_ACTION_TYPES.SET_CURRENT_USER_START, getCurrentUser);
 }
 
 export function* userSagas() {
-    yield all([
-        call(onSignInWithEmailStart),
+    yield* all([
+        call(onCurrentUserStart),
     ]);
 }
-

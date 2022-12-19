@@ -1,20 +1,17 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect} from "react";
 import { CardMainFocus } from "../../components/card/card.styles";
 import { Container } from "./profile.styles";
-import {currentUser} from "../../api/user/user.api";
-import {isUser, User} from "../../interfaces";
+import {currentUserStart} from "../../redux/user/user.action";
+import {useDispatch, useSelector} from "react-redux";
+import {selectCurrentUser} from "../../redux/user/user.selector";
 
 const Profile = () => {
-    const [user, setUser] = useState<User | null>(null);
+    const user = useSelector(selectCurrentUser);
+    const dispatch = useDispatch();
 
     useEffect(  () => {
-        getCurrentUser();
-    }, [])
-
-    const getCurrentUser = async () => {
-        const response = await currentUser();
-        if(isUser(response)) setUser(response);
-    }
+        dispatch(currentUserStart());
+    }, [dispatch])
 
     return (
         <Container>

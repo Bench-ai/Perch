@@ -17,12 +17,13 @@ import {
     ROUTE_SERVICE_DASHBOARDS,
     ROUTE_SERVICE_PROFILE
 } from "../../constants";
+import {useSelector} from "react-redux";
+import {selectCurrentToken} from "../../redux/auth/auth.selector";
 
 
 const NavBar = () => {
-    const token = localStorage.getItem('token');
+    const token = useSelector(selectCurrentToken);
     const navigate = useNavigate();
-
 
     return (
         <Header>

@@ -14,7 +14,6 @@ export function withMatcher<
     >(actionCreator: AC): Matchable<AC>;
 
 export function withMatcher(actionCreator: Function) {
-    console.log(actionCreator);
     const type = actionCreator().type;
     return Object.assign(actionCreator, {
         type,
@@ -44,6 +43,5 @@ export function createAction<T extends string>(
 ): Action<T>;
 
 export function createAction<T extends string, P>(type: T, payload: P) {
-    console.log(type);
     return { type, payload };
 }
