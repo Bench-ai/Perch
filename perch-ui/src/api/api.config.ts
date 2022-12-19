@@ -35,16 +35,7 @@ axiosPrivate.interceptors.response.use(
         if (err.response.status === 401 && !err.config._retry) {
             store.dispatch(accessTokenStart())
             err.config._retry = true;
-
             return axiosPrivate(err.config);
-        }
-        if (err.response.status === 401 && err.config._retry) {
-            const TokenError: CredentialsExpired = {
-                message: "Credentials are Invalid or Expired",
-                expired: true
-            };
-            credentialsExpiredNotification(TokenError);
-            err = TokenError;
         }
         return Promise.reject(err);
     }
