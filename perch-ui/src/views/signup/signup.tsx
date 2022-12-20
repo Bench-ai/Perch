@@ -29,7 +29,7 @@ const Signup = () => {
             setMessage("Username or email is already taken");
             setError(true);
         }
-    }, [loading]);
+    }, [loading, token, signupError, navigate]);
 
     const checkForm = (signupForm: SignupForm): boolean => {
         const {username, password, confirmPassword} = signupForm;
