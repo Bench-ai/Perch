@@ -33,7 +33,7 @@ const Login = () => {
     useEffect(() => {
         if (token) navigate(from, { replace: true });
         if (loginError) setError(true);
-    }, [loading])
+    }, [loading, token, loginError, from, navigate]);
 
     const onFinish = (loginRequest: LoginRequest) => {
         dispatch(signInWithEmailStart(loginRequest));

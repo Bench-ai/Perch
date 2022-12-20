@@ -1,7 +1,5 @@
 import axios from 'axios';
-import {credentialsExpiredNotification} from "../components/notification/notification";
 import {API_ENDPOINT_PREFIX} from '../constants';
-import {CredentialsExpired} from "../interfaces";
 import {store} from "../app/store";
 import {selectCurrentToken} from "../redux/auth/auth.selector";
 import { accessTokenStart } from '../redux/auth/auth.action';
