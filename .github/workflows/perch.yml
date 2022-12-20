@@ -34,8 +34,7 @@ jobs:
     - name: Build with Maven
       run: |
         cd perch
-        mvn clean install
-        mvn package
+        mvn -e -X clean install
 
     # Optional: Uploads the full dependency graph to GitHub to improve the quality of Dependabot alerts this repository can receive
     - name: Update dependency graph
