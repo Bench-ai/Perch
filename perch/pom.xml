@@ -15,6 +15,7 @@
     <description>Test Bench to Simplify Deep Learning</description>
     <properties>
         <java.version>17</java.version>
+        <static.build.skip>false</static.build.skip>
     </properties>
     <dependencies>
         <dependency>
@@ -115,6 +116,7 @@
                 <configuration>
                     <nodeVersion>v18.12.0</nodeVersion>
                     <workingDirectory>../perch-ui</workingDirectory>
+                    <skip>${static.build.skip}</skip>
                 </configuration>
             </plugin>
 
@@ -139,6 +141,9 @@
                         </configuration>
                     </execution>
                 </executions>
+                <configuration>
+                    <skip>${static.build.skip}</skip>
+                </configuration>
             </plugin>
         </plugins>
     </build>
