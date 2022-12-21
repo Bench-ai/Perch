@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useCallback, useEffect, useState} from "react";
 import { CardMainFocus } from "../../components/card/card.styles";
 import { Container } from "./profile.styles";
 import {currentUserStart} from "../../redux/user/user.action";
@@ -24,9 +24,9 @@ const Profile = () => {
         dispatch(currentUserStart());
     }, [dispatch]);
 
-    const onSignOutComplete = () => {
+    const onSignOutComplete = useCallback(() => {
         if (token === null && logoutRequest) navigate(ROUTE_HOME_DEFAULT);
-    }
+    }, [token, logoutRequest, navigate]);
 
     useEffect(() => {
         onSignOutComplete();
