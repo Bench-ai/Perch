@@ -30,5 +30,3 @@ export const currentUserFailure = withMatcher(
     (error: Error): CurrentUserFailure =>
         createAction(USER_ACTION_TYPES.SET_CURRENT_USER_FAILURE, error)
 )
-
-

@@ -46,6 +46,18 @@ export type AccessTokenFailure = ActionWithPayload<
     Error
 >;
 
+export type SignOutStart = Action<
+    AUTH_ACTION_TYPES.SIGN_OUT_START
+>;
+
+export type SignOutSuccess = Action<
+    AUTH_ACTION_TYPES.SIGN_OUT_SUCCESS
+>;
+
+export type SignOutFailure = ActionWithPayload<
+    AUTH_ACTION_TYPES.SIGN_OUT_FAILURE,
+    Error
+>;
 
 export const signInWithEmailStart = withMatcher(
     (loginRequest: LoginRequest): SignInWithEmailStart =>
@@ -80,14 +92,29 @@ export const signUpFailure = withMatcher(
 export const accessTokenStart = withMatcher(
     (): AccessTokenStart =>
         createAction(AUTH_ACTION_TYPES.ACCESS_TOKEN_START)
-)
+);
 
 export const accessTokenSuccess = withMatcher(
     (token: Token): AccessTokenSuccess =>
         createAction(AUTH_ACTION_TYPES.ACCESS_TOKEN_SUCCESS, token)
-)
+);
 
 export const accessTokenFailure = withMatcher(
     (error: Error): AccessTokenFailure =>
         createAction(AUTH_ACTION_TYPES.ACCESS_TOKEN_FAILURE, error)
-)
+);
+
+export const signOutStart = withMatcher(
+    (): SignOutStart =>
+        createAction(AUTH_ACTION_TYPES.SIGN_OUT_START)
+);
+
+export const signOutSuccess = withMatcher(
+    (): SignOutSuccess =>
+        createAction(AUTH_ACTION_TYPES.SIGN_OUT_SUCCESS)
+);
+
+export const signOutFailure = withMatcher(
+    (error: Error): SignOutFailure =>
+        createAction(AUTH_ACTION_TYPES.SIGN_OUT_FAILURE, error)
+);

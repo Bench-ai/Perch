@@ -4,6 +4,7 @@ import {
     currentUserFailure,
     currentUserSuccess,
 } from "./user.action";
+import {signOutSuccess} from "../auth/auth.action";
 
 export type UserReducer = {
     readonly currentUser: User | null,
@@ -18,6 +19,10 @@ const INITIAL_STATE: UserReducer = {
 }
 
 export const userReducer = (state = INITIAL_STATE, action: AnyAction): UserReducer => {
+    if (signOutSuccess.match(action)) {
+        return {...state, currentUser: null, isLoading: false, error: null};
+    }
+
     if (currentUserSuccess.match(action)) {
         return {...state, currentUser: action.payload};
     }

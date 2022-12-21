@@ -31,9 +31,13 @@ const Login = () => {
     const from = location.state?.from?.pathname || ROUTE_SERVICE_DASHBOARDS;
 
     useEffect(() => {
+        onSignInComplete();
+    }, [loading]);
+
+    const onSignInComplete = () => {
         if (token) navigate(from, { replace: true });
         if (loginError) setError(true);
-    }, [loading, token, loginError, from, navigate]);
+    }
 
     const onFinish = (loginRequest: LoginRequest) => {
         dispatch(signInWithEmailStart(loginRequest));
