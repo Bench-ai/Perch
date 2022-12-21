@@ -6,6 +6,9 @@ import {
     signInFailure,
     signInSuccess,
     signInWithEmailStart,
+    signOutFailure,
+    signOutStart,
+    signOutSuccess,
     signUpFailure,
     signUpStart,
     signUpSuccess
@@ -26,9 +29,14 @@ const INITIAL_STATE: AuthReducer = {
 export const authReducer = (state = INITIAL_STATE, action: AnyAction): AuthReducer => {
     if (
         signInWithEmailStart.match(action) ||
-        signUpStart.match(action)
+        signUpStart.match(action) ||
+        signOutStart.match(action)
     ) {
         return {...state, isLoading: true, error: null};
+    }
+
+    if (signOutSuccess.match(action)) {
+        return {...state, token: null, isLoading: false, error: null};
     }
 
     if (
@@ -42,7 +50,8 @@ export const authReducer = (state = INITIAL_STATE, action: AnyAction): AuthReduc
     if (
         signInFailure.match(action) ||
         signUpFailure.match(action) ||
-        accessTokenFailure.match(action)
+        accessTokenFailure.match(action) ||
+        signOutFailure.match(action)
     ) {
         return {...state, isLoading: false, error: action.payload};
     }

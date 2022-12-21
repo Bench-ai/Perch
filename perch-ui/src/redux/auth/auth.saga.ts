@@ -3,12 +3,12 @@ import {
     accessTokenSuccess,
     signInFailure,
     signInSuccess,
-    SignInWithEmailStart,
+    SignInWithEmailStart, signOutFailure, signOutSuccess,
     signUpFailure,
     SignUpStart,
     signUpSuccess
 } from "./auth.action";
-import {accessToken, login, signup} from "../../api/auth/auth.api";
+import {accessToken, login, logout, signup} from "../../api/auth/auth.api";
 import {CredentialsExpired, isToken} from "../../interfaces";
 import {AUTH_ACTION_TYPES} from "../../constants";
 import { credentialsExpiredNotification } from "../../components/notification/notification";
@@ -51,6 +51,15 @@ function* getAccessToken() {
     }
 }
 
+function* signOut() {
+    try {
+        yield* call(logout);
+        yield* put(signOutSuccess());
+    } catch (error) {
+        yield* put(signOutFailure(error as Error));
+    }
+}
+
 export function* onSignInWithEmailStart() {
     yield* takeLatest(AUTH_ACTION_TYPES.SIGN_IN_WITH_EMAIL_START, signInWithEmail);
 }
@@ -63,10 +72,15 @@ export function* onAccessTokenStart() {
     yield* takeLatest(AUTH_ACTION_TYPES.ACCESS_TOKEN_START, getAccessToken);
 }
 
+export function* onSignOut() {
+    yield* takeLatest(AUTH_ACTION_TYPES.SIGN_OUT_START, signOut);
+}
+
 export function* authSagas() {
     yield* all([
         call(onSignInWithEmailStart),
         call(onAccessTokenStart),
         call(onSignUpStart),
+        call(onSignOut),
     ]);
 }

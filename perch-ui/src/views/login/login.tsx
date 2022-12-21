@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {useLocation, useNavigate} from "react-router-dom";
 import {useDispatch, useSelector} from "react-redux";
 
@@ -30,10 +30,14 @@ const Login = () => {
 
     const from = location.state?.from?.pathname || ROUTE_SERVICE_DASHBOARDS;
 
-    useEffect(() => {
+    const onSignInComplete = useCallback(() => {
         if (token) navigate(from, { replace: true });
         if (loginError) setError(true);
-    }, [loading, token, loginError, from, navigate]);
+    }, [token, loginError, from, navigate]);
+
+    useEffect(() => {
+        onSignInComplete();
+    }, [loading, onSignInComplete]);
 
     const onFinish = (loginRequest: LoginRequest) => {
         dispatch(signInWithEmailStart(loginRequest));
