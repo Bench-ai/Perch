@@ -32,6 +32,8 @@ jobs:
         uses: actions/setup-node@v3.5.1
         with:
           node-version: '18'
+      - name: Populate Application Properties
+        run: echo "${{ secrets.APPLICATION_PROPERTIES_PROD }}" > perch/src/main/resources/application.properties
       - name: Build Perch with Maven
         run: mvn -e -X package --file perch/pom.xml -DskipTests
       - name: Build & push Docker image
