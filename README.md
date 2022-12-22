@@ -1,6 +1,7 @@
 # Bench
 
-![Perch CI/CD](https://github.com/Bench-ai/Perch/actions/workflows/perch.yml/badge.svg)
+![Perch Integrations](https://github.com/Bench-ai/Perch/actions/workflows/ci.yml/badge.svg)
+![Perch Deployment](https://github.com/Bench-ai/Perch/actions/workflows/cd.yml/badge.svg)
 
 ## About
 
