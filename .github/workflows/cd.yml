@@ -22,6 +22,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
+      - name: Build Perch with Maven
+        run: mvn -e -X package --file perch/pom.xml -DskipTests
       - name: Set up QEMU
         uses: docker/setup-qemu-action@v2
       - name: Set up Docker Buildx
