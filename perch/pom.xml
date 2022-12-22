@@ -146,6 +146,7 @@
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>perch</finalName>
     </build>
 
 </project>
