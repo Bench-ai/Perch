@@ -36,6 +36,8 @@ jobs:
           node-version: '18'
       - name: Populate Application Properties
         run: echo "${{ secrets.APPLICATION_PROPERTIES_PROD }}" > perch/src/main/resources/application.properties
+      - name: Build Perch with Maven
+        run: mvn -e -X package --file perch/pom.xml -DskipTests
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
