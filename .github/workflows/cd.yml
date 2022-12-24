@@ -5,7 +5,7 @@ on:
     branches: [ "main" ]
 
 env:
-  AWS_REGION: us-west-1
+  AWS_REGION: us-west-2
   ECR_REPOSITORY: perch
   ECS_SERVICE: MY_ECS_SERVICE
   ECS_CLUSTER: MY_ECS_CLUSTER
