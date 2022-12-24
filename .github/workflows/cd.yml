@@ -4,21 +4,23 @@ on:
   push:
     branches: [ "main" ]
 
-#env:
-#  AWS_REGION: MY_AWS_REGION
-#  ECR_REPOSITORY: MY_ECR_REPOSITORY
-#  ECS_SERVICE: MY_ECS_SERVICE
-#  ECS_CLUSTER: MY_ECS_CLUSTER
-#  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION
-#  CONTAINER_NAME: MY_CONTAINER_NAME
-#
-#permissions:
-#  contents: read
+env:
+  AWS_REGION: us-west-1
+  ECR_REPOSITORY: perch
+  ECS_SERVICE: MY_ECS_SERVICE
+  ECS_CLUSTER: MY_ECS_CLUSTER
+  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION
+  CONTAINER_NAME: perch
+
+permissions:
+  contents: read
 
 jobs:
-  docker:
-    name: Docker Image
+  aws:
+    name: Deploy Perch
     runs-on: ubuntu-latest
+    environment: production
+
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -34,17 +36,27 @@ jobs:
           node-version: '18'
       - name: Populate Application Properties
         run: echo "${{ secrets.APPLICATION_PROPERTIES_PROD }}" > perch/src/main/resources/application.properties
-      - name: Build Perch with Maven
-        run: mvn -e -X package --file perch/pom.xml -DskipTests
-      - name: Build & push Docker image
-        uses: mr-smithers-excellent/docker-build-push@v5
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
         with:
-          image: testbenchai/perch
-          tags: latest
-          registry: docker.io
-          dockerfile: Dockerfile
-          username: ${{ secrets.DOCKERHUB_USERNAME }}
-          password: ${{ secrets.DOCKERHUB_TOKEN }}
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v1
+
+      - name: Build, tag, and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          IMAGE_TAG: ${{ github.sha }}
+        run: |
+          docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
+          docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT
+
 #  deploy:
 #    name: Deploy
 #    runs-on: ubuntu-latest
