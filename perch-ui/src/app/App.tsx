@@ -10,12 +10,14 @@ import {
     ROUTE_ANY,
     ROUTE_AUTH_LOGIN,
     ROUTE_AUTH_SIGNUP,
+    ROUTE_HOME_DEFAULT,
     ROUTE_SERVICE_DASHBOARDS,
     ROUTE_SERVICE_PROFILE,
     ROUTE_UNAUTHORIZED
 } from "../constants";
 import {Error401, Error403, Error404} from "../views/error/error";
 import Profile from "../views/profile/profile";
+import Home from '../views/home/home';
 
 const App = () => {
     return (
@@ -27,6 +29,7 @@ const App = () => {
                     <Route path={ROUTE_SERVICE_DASHBOARDS} />
                     <Route path={ROUTE_SERVICE_PROFILE} element={<Profile/>} />
                 </Route>
+                <Route path={ROUTE_HOME_DEFAULT} element={<Home/>} />
                 <Route path={ROUTE_AUTH_LOGIN} element={<Login/>} />
                 <Route path={ROUTE_AUTH_SIGNUP} element={<Signup/>} />
                 <Route path={ROUTE_UNAUTHORIZED} element={<Error401/>} />
