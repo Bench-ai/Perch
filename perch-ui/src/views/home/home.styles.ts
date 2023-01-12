@@ -1,8 +1,18 @@
 import styled from "styled-components";
 
-export const Container = styled.div`
-    margin-top: 200px;
+export const Image = styled.img`
+    margin-top: 50px;
+    max-width: 100%;
 `;
+
+export const Container = styled.div`
+    flex-wrap: nowrap;
+    justify-content: center;
+`;
+
+
+
+
 
 
 
